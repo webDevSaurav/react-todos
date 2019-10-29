@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import todos from './data/todos'
+import './App.css'
+import Todos from './components/Todos'
+import AddTodo from './components/AddForm'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const uniqid = require('uniqid')
+class App extends Component {
+  state = {
+    todos: [...todos]
+  }
+  deleteTodo = id => {
+    const newTodos = this.state.todos.filter(todo => {
+      return todo.id !== id
+    })
+    this.setState({
+      todos: newTodos
+    })
+  }
+  addTodo = content => {
+    const newTodo = {
+      id: uniqid(),
+      content: content
+    }
+    const prevTodos = [...this.state.todos]
+    prevTodos.push(newTodo)
+    this.setState({
+      todos: prevTodos
+    })
+  }
+  render() {
+    return (
+      <div className='todo-app container'>
+        <h1 className='center blue-text'>Todo's</h1>
+        <AddTodo addTodo={this.addTodo}></AddTodo>
+        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo}></Todos>
+      </div>
+    )
+  }
 }
 
-export default App;
+export default App
